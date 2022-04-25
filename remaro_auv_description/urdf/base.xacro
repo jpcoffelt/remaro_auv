@@ -27,16 +27,13 @@
 
       <!-- Rigid body description of the base link -->
       <link name="${namespace}/base_link">
-        <!--
-          Be careful to setup the coefficients for the inertial tensor,
-          otherwise your model will become unstable on Gazebo
-        -->
+        <!-- Assuming uniform solid cylinder -->
         <inertial>
           <mass value="${remaro_auv_mass}" />
           <origin xyz="${remaro_auv_cog}" rpy="0 0 0"/>
-          <inertia ixx="${0.50*remaro_auv_mass*remaro_auv_radius*remaro_auv_radius}" ixy="0" ixz="0"
-                   iyy="${0.25*remaro_auv_mass*remaro_auv_radius*remaro_auv_radius + 0.083*remaro_auv_mass*remaro_auv_length*remaro_auv_length}" iyz="0"
-                   izz="${0.25*remaro_auv_mass*remaro_auv_radius*remaro_auv_radius + 0.083*remaro_auv_mass*remaro_auv_length*remaro_auv_length}" />
+          <inertia ixx="${1/2*remaro_auv_mass*remaro_auv_radius*remaro_auv_radius}" ixy="0" ixz="0"
+                   iyy="${1/4*remaro_auv_mass*remaro_auv_radius*remaro_auv_radius + 1/12*remaro_auv_mass*remaro_auv_length*remaro_auv_length}" iyz="0"
+                   izz="${1/4*remaro_auv_mass*remaro_auv_radius*remaro_auv_radius + 1/12*remaro_auv_mass*remaro_auv_length*remaro_auv_length}" />
         </inertial>
 
         <visual>

@@ -60,14 +60,14 @@
         <gain>1</gain>
 
         <!-- Maximum allowed input value for the input signal for thruster unit -->
-        <clampMax>-3000</clampMax>
+        <clampMax>-100</clampMax>
 
         <!-- Minimum allowed value for the input signal for thruster unit -->
-        <clampMin>3000</clampMin>
+        <clampMin>100</clampMin>
 
         <!-- Minimum and maximum thrust force output allowed -->
-        <thrustMin>-50</thrustMin>
-        <thrustMax>50</thrustMax>
+        <thrustMin>-100</thrustMin>
+        <thrustMax>100</thrustMax>
 
         <!--
         Value from 0 to 1 to set the efficiency of the output thrust force
@@ -85,12 +85,12 @@
 
         <dynamics>
           <type>FirstOrder</type>
-          <timeConstant>0.05</timeConstant>
+          <timeConstant>0.08</timeConstant>
         </dynamics>
 
         <conversion>
           <type>Basic</type>
-          <rotorConstant>0.0002</rotorConstant>
+          <rotorConstant>0.00008</rotorConstant>
         </conversion>        
 
       </plugin>
@@ -109,17 +109,17 @@
 
   <!-- Fin properties -->
   <xacro:property name="fin_area" value="0.04"/>
-  <xacro:property name="fin_rho"  value="1028"/>
-  <xacro:property name="fin_lift_coefficient" value="3.0"/>
-  <xacro:property name="fin_drag_coefficient" value="2.0"/>
+  <xacro:property name="fin_rho"  value="1027.5"/>
+  <xacro:property name="fin_lift_coefficient" value="1.0"/>
+  <xacro:property name="fin_drag_coefficient" value="0.1"/>
   
   <xacro:macro name="fin_macro" params="namespace fin_id *origin mesh_filename">
       <xacro:fin_quadratic_macro
         namespace="${namespace}"
         parent_link="${namespace}/base_link"
         fin_id="${fin_id}"
-        min_joint_limit="${-75.0*d2r}"
-        max_joint_limit="${ 75.0*d2r}"
+        min_joint_limit="${-75*d2r}"
+        max_joint_limit="${ 75*d2r}"
         mesh_filename="${mesh_filename}"
         fin_dynamics_time_constant="0.2"
         lift_constant="${0.5*fin_rho*fin_area*fin_lift_coefficient}"

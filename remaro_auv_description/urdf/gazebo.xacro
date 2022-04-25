@@ -1,26 +1,27 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-
   <!-- Vehicle's parameters (remember to enter the model parameters below) -->
+    <xacro:property name="remaro_auv_length" value="3.00"/>
+    <xacro:property name="remaro_auv_radius" value="-0.1"/>
 
-    <!-- Describing the dimensions of the vehicle's bounding box -->
-    <xacro:property name="remaro_auv_length" value="3.0"/>
-    <xacro:property name="remaro_auv_width"  value="0.5"/>
-    <xacro:property name="remaro_auv_height" value="0.5"/>
-    <xacro:property name="remaro_auv_radius" value="${0.5*remaro_auv_width}"/>
+    <!-- Buoyancy info -->
+    <xacro:property name="remaro_auv_buoyancy_kg" value="2"/> 
+    <xacro:property name="remaro_auv_rho"  value="1027.5"/>  
+    <xacro:property name="remaro_auv_cob" value="0 0 0.2"/>
 
-    <!-- Center of gravity -->
-    <xacro:property name="remaro_auv_mass" value="3228"/>
+    <!-- Volume approximated as cylinder with hemispherical ends -->
+    <xacro:property
+      name="remaro_auv_volume"
+      value="${1/3*pi*remaro_auv_radius*remaro_auv_radius*(3*remaro_auv_length-2*remaro_auv_radius)}"
+    />
+
+    <!-- Mass info -->
+    <xacro:property
+      name="remaro_auv_mass"
+      value="${remaro_auv_volume*remaro_auv_rho-remaro_auv_buoyancy_kg}"
+    />
     <xacro:property name="remaro_auv_cog"  value="0 0 0"/>
-
-    <!-- Center of buoyancy -->
-    <xacro:property name="remaro_auv_rho"  value="1028"/>  
-    <xacro:property name="remaro_auv_cob" value="0 0 0.1"/>
-
-    <!-- Vehicle's actual volume (Gazebo cannot compute the volume out of the mesh) -->
-    <xacro:property name="remaro_auv_volume" value="3.14*remaro_auv_radius*remaro_auv_radius*remaro_auv_length"/>
-
 
     <xacro:macro name="remaro_auv_hydro_model" params="namespace">
       <!-- List of hydrodynamic models this robot's links -->
@@ -35,33 +36,28 @@
         volume when close to the surface.
         This is a workaround the invalid bounding box given by Gazebo-->
         <box>
-          <width> ${remaro_auv_width} </width>
+          <width> ${remaro_auv_volume/(2*remaro_auv_length*remaro_auv_radius)} </width>
           <length>${remaro_auv_length}</length>
-          <height>${remaro_auv_height}</height>
+          <height>${2*remaro_auv_radius}</height>
         </box>
 
         <!-- Center of buoyancy -->
         <center_of_buoyancy>${remaro_auv_cob}</center_of_buoyancy>
 
-        <!-- 1) Fossen's equation of motion -->
+        <!-- Fossen's equation of motion; values interpolated from example AUVs-->
         <hydrodynamic_model>
           <type>fossen</type>
           <added_mass>
-             5    0    0    0    0    0
-             0  100    0    0    0    0
-             0    0   80    0    0    0
-             0    0    0    0.5  0    0
-             0    0    0    0   30    0
-             0    0    0    0    0   35
+             50     0     0     0     0     0
+              0   400     0     0     0     0
+              0     0   400     0     0     0
+              0     0     0     0     0     0
+              0     0     0     0   400     0
+              0     0     0     0     0   400          
           </added_mass>
-          <linear_damping_forward_speed>
-           -10    0    0    0    0    0
-             0 -180    0    0    0  180
-             0    0 -120    0 -120    0
-             0    0    0  -15    0    0
-             0    0   45    0  -25    0
-             0  -35    0    0    0  -35
-          </linear_damping_forward_speed>
+          <linear_damping>-30 -600 -400 -30 -100 -100</linear_damping>
+          <linear_damping_forward_speed>-30 -600 -400 -30 -100 -100</linear_damping_forward_speed>
+          <quadratic_damping>0 0 0 0 0 0</quadratic_damping>
         </hydrodynamic_model>
 
       </link>
