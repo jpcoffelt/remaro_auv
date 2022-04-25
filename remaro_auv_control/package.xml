@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>remaro_auv_control</name>
+  <version>0.1.6</version>
+  <description>Collection of configuration and launch files to start controllers for the REMARO AUV.</description>
+
+  <maintainer email="jcoffelt@rosen-group.com">Jeremy Coffelt</maintainer>
+
+  <author email="jcoffelt@rosen-group.com">Jeremy Coffelt</author>
+
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>uuv_teleop</exec_depend>
+  <exec_depend>uuv_control_utils</exec_depend>
+  <exec_depend>uuv_trajectory_control</exec_depend>
+  <exec_depend>uuv_auv_control_allocator</exec_depend>
+  <exec_depend>remaro_auv_description</exec_depend>
+</package>

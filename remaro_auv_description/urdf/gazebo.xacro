@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+  <!-- Vehicle's parameters (remember to enter the model parameters below) -->
+
+    <!-- Describing the dimensions of the vehicle's bounding box -->
+    <xacro:property name="remaro_auv_length" value="3.0"/>
+    <xacro:property name="remaro_auv_width"  value="0.5"/>
+    <xacro:property name="remaro_auv_height" value="0.5"/>
+    <xacro:property name="remaro_auv_radius" value="${0.5*remaro_auv_width}"/>
+
+    <!-- Center of gravity -->
+    <xacro:property name="remaro_auv_mass" value="3228"/>
+    <xacro:property name="remaro_auv_cog"  value="0 0 0"/>
+
+    <!-- Center of buoyancy -->
+    <xacro:property name="remaro_auv_rho"  value="1028"/>  
+    <xacro:property name="remaro_auv_cob" value="0 0 0.1"/>
+
+    <!-- Vehicle's actual volume (Gazebo cannot compute the volume out of the mesh) -->
+    <xacro:property name="remaro_auv_volume" value="3.14*remaro_auv_radius*remaro_auv_radius*remaro_auv_length"/>
+
+
+    <xacro:macro name="remaro_auv_hydro_model" params="namespace">
+      <!-- List of hydrodynamic models this robot's links -->
+      <link name="${namespace}/base_link">
+        <!-- This flag will make the link neutrally buoyant -->
+        <neutrally_buoyant>0</neutrally_buoyant>
+
+        <!-- Link's volume -->
+        <volume>${remaro_auv_volume}</volume>
+
+        <!-- Link's bounding box, it is used to recalculate the immersed
+        volume when close to the surface.
+        This is a workaround the invalid bounding box given by Gazebo-->
+        <box>
+          <width> ${remaro_auv_width} </width>
+          <length>${remaro_auv_length}</length>
+          <height>${remaro_auv_height}</height>
+        </box>
+
+        <!-- Center of buoyancy -->
+        <center_of_buoyancy>${remaro_auv_cob}</center_of_buoyancy>
+
+        <!-- 1) Fossen's equation of motion -->
+        <hydrodynamic_model>
+          <type>fossen</type>
+          <added_mass>
+             5    0    0    0    0    0
+             0  100    0    0    0    0
+             0    0   80    0    0    0
+             0    0    0    0.5  0    0
+             0    0    0    0   30    0
+             0    0    0    0    0   35
+          </added_mass>
+          <linear_damping_forward_speed>
+           -10    0    0    0    0    0
+             0 -180    0    0    0  180
+             0    0 -120    0 -120    0
+             0    0    0  -15    0    0
+             0    0   45    0  -25    0
+             0  -35    0    0    0  -35
+          </linear_damping_forward_speed>
+        </hydrodynamic_model>
+
+      </link>
+    </xacro:macro>
+
+</robot>

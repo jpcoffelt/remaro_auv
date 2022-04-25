@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>remaro_auv_gazebo</name>
+  <version>0.1.6</version>
+  <description>Sample launch files to start a simulated REMARO AUV in Gazebo.</description>
+
+  <maintainer email="jcoffelt@rosen-group.com">Jeremy Coffelt</maintainer>
+
+  <author email="jcoffelt@rosen-group.com">Jeremy Coffelt</author>
+
+  <license>Apache-2.0</license>
+
+  <exec_depend>remaro_auv_description</exec_depend>
+  <exec_depend>remaro_auv_control</exec_depend>
+  <exec_depend>uuv_control_utils</exec_depend>
+  <exec_depend>rosbag</exec_depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+</package>
